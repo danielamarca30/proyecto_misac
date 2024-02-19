@@ -20,10 +20,7 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
   final _precioController = TextEditingController();
   final _stockController = TextEditingController();
   late Future<EquipoFoto?> equipoFoto;
-  late Directory? directory; // Añadir esta línea para el directorio
-
-  late bool _equipoFotoLoaded;
-
+  late Directory? directory;
   @override
   void initState() {
     super.initState();
@@ -33,7 +30,6 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
     _descripcionController.text = widget.equipo.descripcion ?? '';
     _precioController.text = widget.equipo.precio.toString() ?? '';
     _stockController.text = widget.equipo.stock.toString() ?? '';
-    print('id: ${widget.equipo.id}');
     getExternalStorageDirectory().then((dir) {
       setState(() {
         directory = dir;
@@ -94,17 +90,14 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
                           builder: (context, snapshot) {
                             if (snapshot.hasData &&
                                 snapshot.data!.archivoUrl != null) {
-                              // Construir la ruta del archivo local
                               String localImagePath =
-                                  '${directory?.path}/${snapshot.data!.id!}.png';
-
-                              // Verificar si el archivo local existe
+                                  '${directory?.path}/${snapshot.data!.id_equipo!}.png';
                               File localImageFile = File(localImagePath);
                               if (localImageFile.existsSync()) {
                                 return Image.file(
                                   localImageFile,
-                                  width: 200,
-                                  height: 200,
+                                  width: 500,
+                                  height: 500,
                                   fit: BoxFit.cover,
                                 );
                               } else {
@@ -118,8 +111,8 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
                                         snapshotDownload.hasData) {
                                       return Image.file(
                                         localImageFile,
-                                        width: 200,
-                                        height: 200,
+                                        width: 500,
+                                        height: 500,
                                         fit: BoxFit.cover,
                                       );
                                     } else {
@@ -151,7 +144,7 @@ class _DetalleEquipoState extends State<DetalleEquipo> {
       await imageFile.writeAsBytes(response.bodyBytes);
     } catch (e) {
       print('Error al descargar y guardar la imagen: $e');
-      throw e; // Propagar el error para que se maneje en el FutureBuilder principal
+      throw e;
     }
   }
 

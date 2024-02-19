@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 // Paquetes del proyecto
 import 'package:movil/theme/theme.dart';
+import 'package:movil/ventanas/empleados/main.dart';
 import 'package:movil/ventanas/login/main.dart';
 
 import 'package:movil/ventanas/clientes/main.dart';
 import 'package:movil/ventanas/articulos/main.dart';
+import 'package:movil/ventanas/servicios/main.dart';
+import 'package:movil/ventanas/ventas/main.dart';
 
 class MainHome extends StatefulWidget {
   final String user;
@@ -120,10 +123,8 @@ class _ContentHome extends State<ContentHome> {
             ]),
             trailing: Icon(Icons.arrow_forward_ios, size: 15),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Text('ServicioView()')));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ServicioWindow()));
             },
           ),
         ),
@@ -145,10 +146,8 @@ class _ContentHome extends State<ContentHome> {
             ]),
             trailing: Icon(Icons.arrow_forward_ios, size: 15),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Text('VentanaPrincipalVenta()')));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => VentaWindow()));
             },
           ),
         ),
@@ -223,10 +222,8 @@ class _ContentHome extends State<ContentHome> {
             ]),
             trailing: Icon(Icons.arrow_forward_ios, size: 15),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Text('EmpleadoView()')));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EmpleadoWindow()));
             },
           ),
         ),

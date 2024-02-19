@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:movil/db/db.dart';
 import 'package:sqflite/sqflite.dart';
 
-//local
+//Local
 import 'package:movil/modelos/cliente.dart';
 
 class ClienteProvider with ChangeNotifier {
@@ -31,7 +31,6 @@ class ClienteProvider with ChangeNotifier {
     var db = await _db.database;
     var response = await db.insert('cliente', cliente.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
-    print('cleinte: nuevo: ${response}');
     await getAllClientes();
   }
 

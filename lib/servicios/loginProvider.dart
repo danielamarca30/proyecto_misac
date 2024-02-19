@@ -6,13 +6,16 @@ import 'package:bcrypt/bcrypt.dart';
 
 class LoginProvider with ChangeNotifier {
   late final DataBaseManager _dataBaseDB;
-  // List<Usuario> _usuarios = [];
-  // List<Usuario> get usuarios => _usuarios;
 
-  LoginProvider() {
+  static final LoginProvider _instance = LoginProvider._internal();
+  factory LoginProvider() {
+    return _instance;
+  }
+  LoginProvider._internal() {
     _dataBaseDB = DataBaseManager();
     initializeDatabase();
   }
+
   Future<void> initializeDatabase() async {
     await _dataBaseDB.initializeDatabase();
   }

@@ -1,4 +1,7 @@
+import 'package:movil/db/cotizacion.dart';
 import 'package:movil/db/equipo.dart';
+import 'package:movil/db/servicio.dart';
+import 'package:movil/db/venta.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:movil/db/table.dart';
@@ -69,7 +72,22 @@ class DataBaseManager {
     EquipoTable(),
     EquipoFotoTable(),
     EquipoCategoriaTable(),
-    EquipoCodigoTable()
+    EquipoCodigoTable(),
+    VentaTable(),
+    VentaPagoTable(),
+    VentaEquipoTable(),
+    VentaInsumoTable(),
+    CotizacionTable(),
+    CotizacionServicioTable(),
+    CotizacionVentaTable(),
+    ServicioTable(),
+    ServicioTipoTable(),
+    ServicioInspeccionTable(),
+    ServicioEquipoTable(),
+    ServicioHerramientaTable(),
+    ServicioInsumoTable(),
+    TareaTable(),
+    TareaFotoTable(),
   ];
 
   DataBaseManager() {
@@ -85,8 +103,8 @@ class DataBaseManager {
         print('Inicialización de la base de datos');
         for (var table in tables) {
           await db.execute(table.createTableQuery);
-          await UsuarioTable().createTable(db);
         }
+        await UsuarioTable().initTable(db);
       }, onUpgrade: (db, oldVersion, newVersion) async {
         print('Actualización de la base de datos');
         // Iterar sobre las tablas y ejecutar createTableQuery

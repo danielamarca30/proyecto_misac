@@ -22,6 +22,18 @@ class EquipoWindow extends StatefulWidget {
 }
 
 class _EquipoWindowState extends State<EquipoWindow> {
+  late Directory? directory;
+
+  @override
+  void initState() {
+    super.initState();
+    getExternalStorageDirectory().then((dir) {
+      setState(() {
+        directory = dir;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,56 +46,64 @@ class _EquipoWindowState extends State<EquipoWindow> {
           },
         ),
       ),
-      body: Column(children: [
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: TextField(
-            onChanged: _filtrarEquipos,
-            decoration: InputDecoration(
-              labelText: 'Buscar Equipo',
-              suffixIcon: Icon(Icons.search),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: _filtrarEquipos,
+              decoration: InputDecoration(
+                labelText: 'Buscar Equipo',
+                suffixIcon: Icon(Icons.search),
+              ),
             ),
           ),
-        ),
-        Expanded(child: Consumer<EquipoProvider>(
-          builder: (context, servicioClienteProvider, child) {
-            print('servicioCliente: ${servicioClienteProvider.equipos.length}');
-            return ListView.builder(
-              itemCount: servicioClienteProvider.equipos.length,
-              itemBuilder: (context, index) {
-                Equipo equipo = servicioClienteProvider.equipos[index];
-                return Card(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DetalleEquipo(equipo)));
-                    },
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          title: Text(equipo.nombre ?? ''),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+          Expanded(
+            child: Consumer<EquipoProvider>(
+              builder: (context, servicioClienteProvider, child) {
+                print(
+                    'servicioCliente: ${servicioClienteProvider.equipos.length}');
+                return ListView.builder(
+                  itemCount: servicioClienteProvider.equipos.length,
+                  itemBuilder: (context, index) {
+                    Equipo equipo = servicioClienteProvider.equipos[index];
+                    return Card(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetalleEquipo(equipo),
+                            ),
+                          );
+                        },
+                        child: ListTile(
+                          title: Row(
                             children: [
-                              Text(
-                                '${equipo.descripcion}',
+                              Image.file(
+                                File('${directory?.path}/${equipo.id}.png'),
+                                width: 50,
+                                height: 60,
                               ),
-                              // Text('Dirección: ${cliente.direccion ?? 'N/A'}'),
-                              // Text('Telefono: ${cliente.telefono ?? 'N/A'}'),
+                              SizedBox(
+                                  width:
+                                      8.0), // Espaciado entre la imagen y el texto
+                              Text(equipo.nombre ?? ''),
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                  ),
+                          subtitle: Text(
+                            '${equipo.descripcion}',
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
-            );
-          },
-        ))
-      ]),
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -320,7 +340,7 @@ class _NuevoEquipoState extends State<NuevoEquipo> {
           id_proveedor: _id_proveedor?.id ?? '');
       _createEquipo(context, equipo);
       final idfoto = nanoid(10);
-      await _saveImageToLocalGallery(idfoto);
+      await _saveImageToLocalGallery(id);
       String urlImagen = await _uploadImage();
       print('url ${urlImagen}');
       EquipoFoto equipoFoto =

@@ -12,6 +12,11 @@ class EquipoProvider with ChangeNotifier {
   List<EquipoCategoria> get equipoCategorias => _equipoCategorias;
   List<EquipoFoto> _equipoFotos = [];
   List<EquipoFoto> get equipoFotos => _equipoFotos;
+
+//Detalle
+  List<EquipoDetalle> _equipoDetalle = [];
+  List<EquipoDetalle> get equipoDetalle => _equipoDetalle;
+
   static final EquipoProvider _instance = EquipoProvider._internal();
   factory EquipoProvider() {
     return _instance;
@@ -22,6 +27,7 @@ class EquipoProvider with ChangeNotifier {
     getAllEquipos();
     getAllEquipoCategorias();
     getAllEquipoFotos();
+    getAllEquipoDetalles();
   }
   Future<void> initializedDatabase() async {
     await _db.initializeDatabase();
@@ -59,6 +65,49 @@ class EquipoProvider with ChangeNotifier {
     var db = await _db.database;
     await db.delete('equipo', where: 'id = ?', whereArgs: [equipoId]);
     await getAllEquipos();
+  }
+
+  Future<void> getAllEquipoDetalles() async {
+    var db = await _db.database;
+    final List<Map<String, dynamic>> result = await db.rawQuery('''
+    SELECT
+      equipo.id AS id,
+      equipo.id_proveedor AS id_proveedor_id,
+      proveedor.nombre AS id_proveedor_nombre,
+      proveedor.descripcion AS id_proveedor_descripcion,
+      equipo.id_equipo_categoria AS id_equipo_categoria,
+      equipo.nombre AS nombre,
+      equipo.descripcion AS descripcion,
+      equipo.stock AS stock,
+      equipo.precio AS precio,
+      equipo.createdAt AS createdAt,
+      equipo.updatedAt AS updatedAt,
+      proveedor.id AS proveedors_id,
+      proveedor.nombre AS proveedors_nombre,
+      proveedor.descripcion AS proveedors_descripcion,
+      proveedor.direccion AS proveedors_direccion,
+      proveedor.contacto AS proveedors_contacto,
+      proveedor.createdAt AS proveedors_createdAt,
+      proveedor.updatedAt AS proveedors_updatedAt,
+      equipo_categoria.id AS equipoCategorias_id,
+      equipo_categoria.nombre AS equipoCategorias_nombre,
+      equipo_categoria.descripcion AS equipoCategorias_descripcion,
+      equipo_categoria.createdAt AS equipoCategorias_createdAt,
+      equipo_categoria.updatedAt AS equipoCategorias_updatedAt,
+      equipo_foto.id AS equipoFoto_id,
+      equipo_foto.id_equipo AS equipoFoto_id_equipo,
+      equipo_foto.archivoUrl AS equipoFoto_archivoUrl,
+      equipo_foto.formato AS equipoFoto_formato,
+      equipo_foto.descripcion AS equipoFoto_descripcion,
+      equipo_foto.createdAt AS equipoFoto_createdAt,
+      equipo_foto.updatedAt AS equipoFoto_updatedAt
+    FROM equipo AS equipo
+    LEFT JOIN proveedor ON equipo.id_proveedor = proveedor.id
+    LEFT JOIN equipo_categoria ON equipo.id_equipo_categoria = equipo_categoria.id
+    LEFT JOIN equipo_foto ON equipo.id = equipo_foto.id_equipo
+  ''');
+    _equipoDetalle = result.map((map) => EquipoDetalle.fromMap(map)).toList();
+    notifyListeners();
   }
 
   Future<void> getAllEquipos() async {

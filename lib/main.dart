@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:movil/servicios/clienteProvider.dart';
+import 'package:movil/servicios/empleadoProvider.dart';
 import 'package:movil/servicios/equipoProvider.dart';
 import 'package:movil/servicios/proveedorProvider.dart';
+import 'package:movil/servicios/servicioProvider.dart';
+import 'package:movil/servicios/ventaProvider.dart';
 import 'package:provider/provider.dart';
 // Componentes
 import 'package:movil/servicios/loginProvider.dart';
@@ -13,6 +16,9 @@ void main() {
     ChangeNotifierProvider(create: (_) => ClienteProvider()),
     ChangeNotifierProvider(create: (_) => EquipoProvider()),
     ChangeNotifierProvider(create: (_) => ProveedorProvider()),
+    ChangeNotifierProvider(create: (_) => EmpleadoProvider()),
+    ChangeNotifierProvider(create: (_) => VentaProvider()),
+    ChangeNotifierProvider(create: (_) => ServicioProvider()),
   ], child: const Proyecto()));
 }
 

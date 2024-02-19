@@ -28,25 +28,6 @@ class EmpleadoTable extends DatabaseTable {
     await db.transaction((txn) async {
       await txn.execute('DROP TABLE IF EXISTS empleado');
       await txn.execute(createTableQuery);
-      await txn.insert(
-        tableName,
-        {
-          'id': '1',
-          'rol': 'TECNICO',
-          'salario': 50000.0,
-          'nombres': 'DANIEL',
-          'apellidoPaterno': 'ACHACOLLO',
-          'apellidoMaterno': '',
-          'nombreCompleto': 'DANIEL ACHACOLLO',
-          'ci': '123456',
-          'direccion': 'Calle 123',
-          'telefono': '555-1234',
-          'correo': 'pablo.bueno@example.com',
-          'createdAt': '2024-02-12',
-          'updatedAt': '2024-02-12',
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
     });
   }
 }
